@@ -21,7 +21,7 @@ I used PHP 8.1.7, Laravel 9 and sqlite for the database.
 - #### api/book-trip
 
 
-returns status of your booking taking input the seat and trip
+books a trip seat taking input the seat and trip
 
 
 #### Database dump available for testing: databasedump.sql
