@@ -34,12 +34,22 @@ class SeatAvailabilityService
     /**
      * Get available seat ids
      */
+
+    // All trips with same bus and common Trip
     $busId = $trip->bus_id;
-    // All trips with same bus and starting station
-    $commonTrips = Trip::select('id')
-      ->where('start_station_id', $startStationId)
-      ->where('bus_id', $busId)
-      ->get();
+    $inBetweenTrips = $trip->inbetween_trip_ids;
+    if (is_null($inBetweenTrips)) {
+      $commonTrips = Trip::select('id')
+        ->where('start_station_id', $startStationId)
+        ->orWhere('end_station_id', $endStationId)
+        ->where('bus_id', $busId)
+        ->get();
+    } else {
+      $commonTrips = Trip::select('id')
+        -> whereIn('id', $inBetweenTrips)
+        ->where('bus_id', $busId)
+        ->get();
+    }
 
     // Get all booked seats
     $bookedSeatIdArray = Reservation::select('seat_id')
